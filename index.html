@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body> 
+     <div style="display: flex;justify-content: space-between;padding:  100px;">
+        <div id="aka">
+         ukhsdfiuis
+        </div>
+        <div>
+    <input type="text" placeholder="write anything" id="notes"/>
+    <button onclick="addtodo()">create the todo</button>
+            </div>
+     </div>
+     <script>
+        async function addtodo() {
+             if(document.getElementById("notes").value.trim()==="")
+        {
+            return "";
+        }
+         await axios.post("http://localhost:3000/notes",{
+         note :document.getElementById("notes").value
+           },   
+           {headers: {
+                    token: localStorage.getItem("token")
+                }
+            })
+        const newnote=document.createElement("div")
+        newnote.innerHTML=document.getElementById("notes").value
+        newnote.setAttribute("style","border: 2px solid black;padding: 10px;")
+        document.getElementById("aka").appendChild(newnote);
+        document.getElementById("notes").value="";
+        }
+        async function gettodo() {
+            const response = await axios.get("http://localhost:3000/notes",{
+                headers:{
+                    token: localStorage.getItem("token")
+                }
+            });
+                const notes = response.data.notes;
+                document.getElementById("aka").innerHTML = "";
+                for(let i=0;i<notes.length;i++)
+                {
+                    const newnote=document.createElement("div")
+                    newnote.innerHTML = notes[i].note
+        newnote.setAttribute("style","border: 2px solid black;padding: 10px;")
+        document.getElementById("aka").appendChild(newnote);
+        
+                }
+
+        }
+        gettodo();
+     </script>
+
+</body>
+</html>
